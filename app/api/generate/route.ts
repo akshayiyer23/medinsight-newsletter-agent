@@ -154,7 +154,16 @@ CLIENT NEWSLETTER BLOCK RULES:
 
 This is NOT a LinkedIn newsletter. Do not write educational paragraphs.
 
-BODY LENGTH (most important rule): Most blocks in the examples have NO body text at all — just a header and a CTA. Some have one short sentence. A few have two. Never write 3 or more sentences. Leave body empty unless context genuinely helps the reader decide to click.
+BODY LENGTH: About half the blocks in the examples have one sentence of body text; the other half are header + CTA only. Use this decision rule:
+  - Write ONE sentence when the source has a real value prop worth naming (what the webinar covers, what a research piece found, what an event is about, what a product does).
+  - Leave body empty only when the header already says everything (pure event registration, navigational link with no context to add).
+  - Never write more than two sentences. Never write three.
+
+ONE-SENTENCE BODY STYLE — match the examples:
+  - Webinar: "Join us [date] to explore [specific topic]."
+  - Article/blog: "[One-sentence summary of the actual finding or argument]."
+  - Product/feature: "[One sentence on what it does or why it matters]."
+  - Event: "[One sentence on what attendees will get]."
 
 HEADER: Short, direct, specific. Match the style from the examples:
   - Content-type prefix: "Webinar: [topic]", "Article: [topic]", "Client story: [topic]"
@@ -185,7 +194,7 @@ ${truncated}
 Draft ONE client newsletter block for this source.
 
 Header: short, direct, specific — content-type prefix or plain declarative, matching the examples exactly.
-Body: empty string "" if no context is needed (most blocks); one short sentence at most.
+Body: one short sentence if the source has a real value prop to convey; empty string "" only if the header already says everything.
 CTA: action text only — no brackets, no URL (e.g. "Register now" not "[Register now]")`
 }
 
