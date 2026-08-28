@@ -48,10 +48,14 @@ function parseUrls(input: string): string[] {
     })
 }
 
+function stripCtaBrackets(cta: string): string {
+  return cta.replace(/^\[+|\]+$/g, '').trim()
+}
+
 function blockToText(block: GeneratedBlock, tab: Tab): string {
   if (tab === 'client') {
     const bodyLine = block.body ? `${block.body}\n` : ''
-    return `${block.header}\n${bodyLine}[${block.cta}]`
+    return `${block.header}\n${bodyLine}[${stripCtaBrackets(block.cta)}]`
   }
   return `${block.header}\n\n${block.body}\n\n${block.cta} ${block.sourceUrl}`
 }
@@ -484,7 +488,7 @@ export default function Home() {
                             className="text-sm font-semibold transition-colors"
                             style={{ color: '#1e293b' }}
                           >
-                            [{result.block.cta}]
+                            [{stripCtaBrackets(result.block.cta)}]
                           </a>
                         ) : (
                           <a

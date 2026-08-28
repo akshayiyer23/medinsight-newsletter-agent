@@ -40,6 +40,17 @@ const BLOCK_TOOL: Anthropic.Tool = {
   },
 }
 
+// Strips em dashes and double hyphens from client output, replacing with a comma or period.
+// This is a hard post-processing step — prompt instructions alone are not reliable enough.
+function stripDashes(s: string): string {
+  return s
+    .replace(/\s*--\s*/g, ', ')
+    .replace(/\s*—\s*/g, ', ')
+    .replace(/,\s*$/, '.')        // trailing comma → period
+    .replace(/,(\s*[.?!])/, '$1') // comma before punctuation → just punctuation
+    .trim()
+}
+
 async function withRetry<T>(fn: () => Promise<T>, attempts = 2): Promise<T> {
   for (let i = 0; i < attempts; i++) {
     try { return await fn() }
@@ -269,6 +280,17 @@ export async function POST(req: NextRequest) {
 
   // Strip any surrounding brackets Claude may include despite instructions (e.g. "[Read the blog]" → "Read the blog")
   const cta = (block.cta ?? '').replace(/^\[+|\]+$/g, '').trim()
+
+  // Hard cleanup for client tab: strip em dashes and double hyphens from all fields.
+  // Applied after Claude returns — prompt instructions alone are not reliable enough.
+  if (tab === 'client') {
+    return NextResponse.json({
+      header: stripDashes(block.header),
+      body: stripDashes(block.body ?? ''),
+      cta: stripDashes(cta),
+      sourceUrl: url,
+    })
+  }
 
   return NextResponse.json({
     header: block.header,

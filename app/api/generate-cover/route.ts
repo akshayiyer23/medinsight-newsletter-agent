@@ -39,6 +39,15 @@ const CLIENT_COVER_TOOL: Anthropic.Tool = {
   },
 }
 
+function stripDashes(s: string): string {
+  return s
+    .replace(/\s*--\s*/g, ', ')
+    .replace(/\s*—\s*/g, ', ')
+    .replace(/,\s*$/, '.')
+    .replace(/,(\s*[.?!])/, '$1')
+    .trim()
+}
+
 async function withRetry<T>(fn: () => Promise<T>, attempts = 2): Promise<T> {
   for (let i = 0; i < attempts; i++) {
     try { return await fn() }
@@ -150,6 +159,15 @@ export async function POST(req: NextRequest) {
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     return NextResponse.json({ error: `Claude API error: ${msg}` }, { status: 500 })
+  }
+
+  // Hard cleanup for client tab: strip em dashes and double hyphens from all cover fields.
+  if (tab === 'client') {
+    const cleaned: Record<string, string> = {}
+    for (const [k, v] of Object.entries(cover)) {
+      cleaned[k] = typeof v === 'string' ? stripDashes(v) : v
+    }
+    return NextResponse.json({ ...cleaned, tab })
   }
 
   return NextResponse.json({ ...cover, tab })
